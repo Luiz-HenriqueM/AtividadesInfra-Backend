@@ -1,22 +1,39 @@
 import express from 'express';
 
-const app = express();  //Primeira instancia do express
+const app = express();
+let livros = [
+    {
+        idLivro: 1,
+        dsTitulo: "O Senhor dos Anéis",
+        dsAutor: "J.R.R. Tolkien",
+        dsEditora: "HarperCollins",
+        fgDisponivel: true
+    }
+];
+
+app.get ("/", (req, res) => { // Rota raiz
+    res.send("Seja bem vindo a gestão de livros");
+    });
+
+app.get ("/livros", (req, res) => { // Rota livros
+    res.json(livros);
+
+});
+
+app.get ("/livros/:id", (req, res) => { // Rota livros com id
 
 
+    const id = parseInt(req.params.id);
+    if (isNaN(id)) {
+        res.status(400).json({mensagem: 'ID inválido'});
+        return;
+    }
+});
 
+app.listen(3001);
 
-
-
-
-let meuPrimeiroLivro = {
-    id: 1,
-    dsTitulo: "O Senhor dos Aneis",
-    dsAutor: "JRR Tolkien",
-    fgDisponivel: true,
-};
-
- //idLivro
- // dsTitulo, identificador
+ //idLivro, identificador
+ // dsTitulo, string
  // dsAutor, string
  // dsEditora, string
  // fgDisponivel, boolean
@@ -24,34 +41,7 @@ let meuPrimeiroLivro = {
 
 
 
-let livros = [meuPrimeiroLivro] //Banco de Dados
-
-
-
-
-
-
-
-
-
-
-
-//estado + caminho + funcao
-app.get("/", function(req, res) { //rota raiz
-    res.send("Seja bem vindo a gestão de livros")
-
-});
-
-app.get("/livros",  function(req, res) {
-
-
-
-    //Segundo Pilar, Rotas
-    res.send("Olá Peter!");
-
-});
-
-app.listen(3000); //Terceiro Pilar, porta a ser ouvida
+// let livros = [meuPrimeiroLivro] //Banco de Dados
 
 
 //CRUD(Post, Get, Put/Patch, Delete)
