@@ -1,12 +1,14 @@
 import express from 'express';
 
 const app = express();
+app.use(express.json()); // Middleware para habilitar o parsing de JSON
+let ultimo_Id = 1;
+
 let livros = [
     {
         idLivro: 1,
         dsTitulo: "O Senhor dos Anéis",
         dsAutor: "J.R.R. Tolkien",
-        dsEditora: "HarperCollins",
         fgDisponivel: true
     }
 ];
@@ -28,6 +30,33 @@ app.get ("/livros/:id", (req, res) => { // Rota livros com id
         res.status(400).json({mensagem: 'ID inválido'});
         return;
     }
+});
+
+app.post("/livros", (req, res) => {
+
+    let autor_enviado = req.body.dsAutor;
+    let titulo_enviado = req.body.dsTitulo;
+
+    if (!autor_enviado || !titulo_enviado) {
+        res.status(400).json({
+            mensagem: "Autor e título são obrigatórios"
+        });
+        return;
+    }
+
+    let id_novo = ultimo_Id + 1;
+    ultimo_Id++;
+
+    let novo_livro = {
+        idLivro: id_novo,
+        dsTitulo: titulo_enviado,
+        dsAutor: autor_enviado,
+        fgDisponivel: true
+    };
+
+    livros.push(novo_livro);
+
+    res.status(201).json(novo_livro);
 });
 
 app.listen(3001);
