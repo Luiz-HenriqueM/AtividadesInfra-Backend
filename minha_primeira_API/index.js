@@ -59,10 +59,28 @@ app.post("/livros", (req, res) => {
     res.status(201).json(novo_livro);
 });
 
+app.delete("/livros/:id", (req, res) => {
+    const id = parseInt(req.params.id);
+    if (isNaN(id)) {
+        res.status(400).json({mensagem: 'ID inválido'});
+        return;
+    }
+
+    let index_livro = livros.findIndex(livro => livro.idLivro === id);
+
+    if (index_livro === -1) {
+        res.status(404).send();
+        return;
+    }
+    
+    livros.splice(index_livro, 1);
+    res.status(204).send();
+
+});
+
 app.listen(3001);
 
 
-//Doctor Who
 
  //idLivro, identificador
  // dsTitulo, string
