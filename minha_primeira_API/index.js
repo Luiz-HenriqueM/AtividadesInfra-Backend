@@ -1,5 +1,15 @@
 import express from 'express';
 
+function validarParametros(parametros_a_validar) {
+    const numero = parseInt(parametros_a_validar);
+    if (isNaN(numero)) {
+        return false;
+    }
+    return true;
+}
+
+
+
 const app = express();
 app.use(express.json()); // Middleware para habilitar o parsing de JSON
 let ultimo_Id = 1;
@@ -19,18 +29,26 @@ app.get ("/", (req, res) => { // Rota raiz
 
 app.get ("/livros", (req, res) => { // Rota livros
     res.json(livros);
-
+    
 });
 
 app.get ("/livros/:id", (req, res) => { // Rota livros com id
 
 
-    const id = parseInt(req.params.id);
-    if (isNaN(id)) {
-        res.status(400).json({mensagem: 'ID inválido'});
-        return;
+    if (!validarParametros(req.params.id)) {
+        return res.status(400).json({mensagem: "ID inválido"});
     }
-});
+
+    let livro = livros.find((livro) => {
+    return livro.idLivro === id;
+    });
+
+    if (!livro) {
+        return res.status(404).send();
+     }
+
+    res.json(livro);
+    });
 
 app.post("/livros", (req, res) => {
 
@@ -77,6 +95,37 @@ app.delete("/livros/:id", (req, res) => {
     res.status(204).send();
 
 });
+
+app.patch("/livros/:id", (req, res) => {
+  const id = parseInt(req.params.id);
+  const novo_titulo = req.body.dsTitulo;
+  const novo_autor = req.body.dsAutor;
+
+  if (isNaN(id)) {
+    return res
+      .status(400)
+      .json({ mensagem: "identificador precisa ser um numero valido" });
+  }
+
+  let index_livro = livros.findIndex((livro) => {
+    return livro.idLivro === id;
+  });
+
+  if (index_livro === -1) {
+    return res.sendStatus(404);
+  }
+
+  let livro_a_ser_atualizado = livros[index_livro];
+
+  if (novo_autor !== undefined) {
+    livro_a_ser_atualizado.dsAutor = novo_autor;
+  }
+
+  if (novo_titulo !== undefined) {
+    livro_a_ser_atualizado.dsTitulo = novo_titulo;
+  }
+});
+
 
 app.listen(3001);
 
