@@ -77,6 +77,51 @@ app.post("/livros", (req, res) => {
     res.status(201).json(novo_livro);
 });
 
+app.post("/livros/:id/emprestimo", (req, res) => {
+    const id = parseInt(req.params.id);
+    if (isNaN(id)) {
+        res.status(400).json({mensagem: 'ID inválido'});
+        return;
+    }
+
+    const livro = livros.find(livro => livro.idLivro === id);
+
+    if (!livro) {
+        res.status(404).send();
+        return;
+    }
+
+    if (!livro.fgDisponivel) {
+        res.status(400).json({mensagem: 'Livro não disponível para empréstimo'});
+        return;
+    }
+
+    livro.fgDisponivel = false;
+    res.json(livro);
+});
+
+app.post("/livros/:id/devolucao", (req, res) => {
+    const id = parseInt(req.params.id);
+    if (isNaN(id)) {
+        res.status(400).json({mensagem: 'ID inválido'});
+        return;
+    }
+    const livro = livros.find(livro => livro.idLivro === id);
+
+    if (!livro) {
+        res.status(404).send();
+        return;
+    }
+
+    if (livro.fgDisponivel) {
+        res.status(400).json({mensagem: 'Livro já está disponível'});
+        return;
+    }
+    livro.fgDisponivel = true;
+    res.json(livro);
+});
+
+
 app.delete("/livros/:id", (req, res) => {
     const id = parseInt(req.params.id);
     if (isNaN(id)) {
