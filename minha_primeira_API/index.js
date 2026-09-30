@@ -1,4 +1,7 @@
 import express from 'express';
+import cors from 'cors';
+
+app.use(cors());
 
 function validarParametros(parametros_a_validar) {
     const numero = parseInt(parametros_a_validar);
@@ -11,6 +14,7 @@ function validarParametros(parametros_a_validar) {
 
 
 const app = express();
+
 app.use(express.json()); // Middleware para habilitar o parsing de JSON
 let ultimo_Id = 1;
 
