@@ -4,21 +4,21 @@ import router from "express";
 
 const router = router();
 
-router.get("/livros", (req, res) => {
+router.get("/", (req, res) => {
     //res.json(livros);
 });
 
-router.get("/livros/:id", (req, res) => {
+router.get("/:id", (req, res) => {
     //res.json(livros.find(livro => livro.idLivro === req.params.id));
 });
 
-router.post("/livros", (req, res) => {
+router.post("/", (req, res) => {
 });
 
-router.delete("/livros/:id", (req, res) => {
+router.delete("/:id", (req, res) => {
 });
 
-router.patch("/livros/:id", (req, res) => {
+router.patch("/:id", (req, res) => {
 });
 
 export default router;
